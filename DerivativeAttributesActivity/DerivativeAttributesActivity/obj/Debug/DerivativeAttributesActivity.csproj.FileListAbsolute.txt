@@ -1,0 +1,8 @@
+C:\Users\vizzada1\documents\visual studio 2010\Projects\DerivativeAttributesActivity\DerivativeAttributesActivity\bin\Debug\DerivativeAttributes.dll.config
+C:\Users\vizzada1\documents\visual studio 2010\Projects\DerivativeAttributesActivity\DerivativeAttributesActivity\bin\Debug\DerivativeAttributes.dll
+C:\Users\vizzada1\documents\visual studio 2010\Projects\DerivativeAttributesActivity\DerivativeAttributesActivity\bin\Debug\DerivativeAttributes.pdb
+C:\Users\vizzada1\documents\visual studio 2010\Projects\DerivativeAttributesActivity\DerivativeAttributesActivity\bin\Debug\Microsoft.IdentityManagement.ExternalSettingsManager.dll
+C:\Users\vizzada1\documents\visual studio 2010\Projects\DerivativeAttributesActivity\DerivativeAttributesActivity\bin\Debug\Microsoft.IdentityManagement.SettingsContract.dll
+C:\Users\vizzada1\documents\visual studio 2010\Projects\DerivativeAttributesActivity\DerivativeAttributesActivity\obj\Debug\DerivativeAttributes.dll
+C:\Users\vizzada1\documents\visual studio 2010\Projects\DerivativeAttributesActivity\DerivativeAttributesActivity\obj\Debug\DerivativeAttributes.pdb
+C:\Users\vizzada1\documents\visual studio 2010\Projects\DerivativeAttributesActivity\DerivativeAttributesActivity\obj\Debug\DerivativeAttributesActivity.csprojResolveAssemblyReference.cache
