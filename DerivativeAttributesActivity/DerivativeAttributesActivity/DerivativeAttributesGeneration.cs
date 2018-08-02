@@ -31,6 +31,11 @@ namespace FIM.DerivativeAttributesActivity
         private string displayName;
         private string samAccountName;
         private string upn;
+        private string firstName;
+        private string lastName;
+        private string domain;
+        private int countUpn;
+        private int countSam;
         const string FIMADMGUID = "4074f258-a177-42df-b8ca-cba1a0cefb25";
 
         #region ReadCurrentRequest
@@ -209,7 +214,212 @@ namespace FIM.DerivativeAttributesActivity
             }
         }
         #endregion
+        #region enumerateResource
+        public static DependencyProperty enumerateResourcesActivity1_ActorId1Property = DependencyProperty.Register("enumerateResourcesActivity1_ActorId1", typeof(System.Guid), typeof(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration));
 
+        [DesignerSerializationVisibilityAttribute(DesignerSerializationVisibility.Visible)]
+        [BrowsableAttribute(true)]
+        [CategoryAttribute("Misc")]
+        public Guid enumerateResourcesActivity1_ActorId1
+        {
+            get
+            {
+                return ((System.Guid)(base.GetValue(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration.enumerateResourcesActivity1_ActorId1Property)));
+            }
+            set
+            {
+                base.SetValue(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration.enumerateResourcesActivity1_ActorId1Property, value);
+            }
+        }
+
+        public static DependencyProperty enumerateResourcesActivity1_PageSize1Property = DependencyProperty.Register("enumerateResourcesActivity1_PageSize1", typeof(System.Int32), typeof(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration));
+
+        [DesignerSerializationVisibilityAttribute(DesignerSerializationVisibility.Visible)]
+        [BrowsableAttribute(true)]
+        [CategoryAttribute("Misc")]
+        public Int32 enumerateResourcesActivity1_PageSize1
+        {
+            get
+            {
+                return ((int)(base.GetValue(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration.enumerateResourcesActivity1_PageSize1Property)));
+            }
+            set
+            {
+                base.SetValue(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration.enumerateResourcesActivity1_PageSize1Property, value);
+            }
+        }
+
+        public static DependencyProperty enumerateResourcesActivity1_Selection1Property = DependencyProperty.Register("enumerateResourcesActivity1_Selection1", typeof(System.String[]), typeof(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration));
+
+        [DesignerSerializationVisibilityAttribute(DesignerSerializationVisibility.Visible)]
+        [BrowsableAttribute(true)]
+        [CategoryAttribute("Misc")]
+        public String[] enumerateResourcesActivity1_Selection1
+        {
+            get
+            {
+                return ((string[])(base.GetValue(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration.enumerateResourcesActivity1_Selection1Property)));
+            }
+            set
+            {
+                base.SetValue(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration.enumerateResourcesActivity1_Selection1Property, value);
+            }
+        }
+
+        public static DependencyProperty enumerateResourcesActivity1_SortingAttributes1Property = DependencyProperty.Register("enumerateResourcesActivity1_SortingAttributes1", typeof(Microsoft.ResourceManagement.WebServices.WSEnumeration.SortingAttribute[]), typeof(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration));
+
+        [DesignerSerializationVisibilityAttribute(DesignerSerializationVisibility.Visible)]
+        [BrowsableAttribute(true)]
+        [CategoryAttribute("Misc")]
+        public Microsoft.ResourceManagement.WebServices.WSEnumeration.SortingAttribute[] enumerateResourcesActivity1_SortingAttributes1
+        {
+            get
+            {
+                return ((Microsoft.ResourceManagement.WebServices.WSEnumeration.SortingAttribute[])(base.GetValue(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration.enumerateResourcesActivity1_SortingAttributes1Property)));
+            }
+            set
+            {
+                base.SetValue(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration.enumerateResourcesActivity1_SortingAttributes1Property, value);
+            }
+        }
+
+        public static DependencyProperty enumerateResourcesActivity1_TotalResultsCount1Property = DependencyProperty.Register("enumerateResourcesActivity1_TotalResultsCount1", typeof(System.Int32), typeof(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration));
+
+        [DesignerSerializationVisibilityAttribute(DesignerSerializationVisibility.Visible)]
+        [BrowsableAttribute(true)]
+        [CategoryAttribute("Misc")]
+        public Int32 enumerateResourcesActivity1_TotalResultsCount1
+        {
+            get
+            {
+                return ((int)(base.GetValue(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration.enumerateResourcesActivity1_TotalResultsCount1Property)));
+            }
+            set
+            {
+                base.SetValue(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration.enumerateResourcesActivity1_TotalResultsCount1Property, value);
+            }
+        }
+
+        public static DependencyProperty enumerateResourcesActivity1_XPathFilter1Property = DependencyProperty.Register("enumerateResourcesActivity1_XPathFilter1", typeof(System.String), typeof(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration));
+
+        [DesignerSerializationVisibilityAttribute(DesignerSerializationVisibility.Visible)]
+        [BrowsableAttribute(true)]
+        [CategoryAttribute("Misc")]
+        public String enumerateResourcesActivity1_XPathFilter1
+        {
+            get
+            {
+                return ((string)(base.GetValue(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration.enumerateResourcesActivity1_XPathFilter1Property)));
+            }
+            set
+            {
+                base.SetValue(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration.enumerateResourcesActivity1_XPathFilter1Property, value);
+            }
+        }
+        #endregion
+        #region EnumerateResource2
+        public static DependencyProperty enumerateResourcesActivity2_ActorId1Property = DependencyProperty.Register("enumerateResourcesActivity2_ActorId1", typeof(System.Guid), typeof(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration));
+
+        [DesignerSerializationVisibilityAttribute(DesignerSerializationVisibility.Visible)]
+        [BrowsableAttribute(true)]
+        [CategoryAttribute("Misc")]
+        public Guid enumerateResourcesActivity2_ActorId1
+        {
+            get
+            {
+                return ((System.Guid)(base.GetValue(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration.enumerateResourcesActivity2_ActorId1Property)));
+            }
+            set
+            {
+                base.SetValue(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration.enumerateResourcesActivity2_ActorId1Property, value);
+            }
+        }
+
+        public static DependencyProperty enumerateResourcesActivity2_PageSize1Property = DependencyProperty.Register("enumerateResourcesActivity2_PageSize1", typeof(System.Int32), typeof(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration));
+
+        [DesignerSerializationVisibilityAttribute(DesignerSerializationVisibility.Visible)]
+        [BrowsableAttribute(true)]
+        [CategoryAttribute("Misc")]
+        public Int32 enumerateResourcesActivity2_PageSize1
+        {
+            get
+            {
+                return ((int)(base.GetValue(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration.enumerateResourcesActivity2_PageSize1Property)));
+            }
+            set
+            {
+                base.SetValue(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration.enumerateResourcesActivity2_PageSize1Property, value);
+            }
+        }
+
+        public static DependencyProperty enumerateResourcesActivity2_Selection1Property = DependencyProperty.Register("enumerateResourcesActivity2_Selection1", typeof(System.String[]), typeof(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration));
+
+        [DesignerSerializationVisibilityAttribute(DesignerSerializationVisibility.Visible)]
+        [BrowsableAttribute(true)]
+        [CategoryAttribute("Misc")]
+        public String[] enumerateResourcesActivity2_Selection1
+        {
+            get
+            {
+                return ((string[])(base.GetValue(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration.enumerateResourcesActivity2_Selection1Property)));
+            }
+            set
+            {
+                base.SetValue(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration.enumerateResourcesActivity2_Selection1Property, value);
+            }
+        }
+
+        public static DependencyProperty enumerateResourcesActivity2_SortingAttributes1Property = DependencyProperty.Register("enumerateResourcesActivity2_SortingAttributes1", typeof(Microsoft.ResourceManagement.WebServices.WSEnumeration.SortingAttribute[]), typeof(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration));
+
+        [DesignerSerializationVisibilityAttribute(DesignerSerializationVisibility.Visible)]
+        [BrowsableAttribute(true)]
+        [CategoryAttribute("Misc")]
+        public Microsoft.ResourceManagement.WebServices.WSEnumeration.SortingAttribute[] enumerateResourcesActivity2_SortingAttributes1
+        {
+            get
+            {
+                return ((Microsoft.ResourceManagement.WebServices.WSEnumeration.SortingAttribute[])(base.GetValue(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration.enumerateResourcesActivity2_SortingAttributes1Property)));
+            }
+            set
+            {
+                base.SetValue(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration.enumerateResourcesActivity2_SortingAttributes1Property, value);
+            }
+        }
+
+        public static DependencyProperty enumerateResourcesActivity2_TotalResultsCount1Property = DependencyProperty.Register("enumerateResourcesActivity2_TotalResultsCount1", typeof(System.Int32), typeof(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration));
+
+        [DesignerSerializationVisibilityAttribute(DesignerSerializationVisibility.Visible)]
+        [BrowsableAttribute(true)]
+        [CategoryAttribute("Misc")]
+        public Int32 enumerateResourcesActivity2_TotalResultsCount1
+        {
+            get
+            {
+                return ((int)(base.GetValue(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration.enumerateResourcesActivity2_TotalResultsCount1Property)));
+            }
+            set
+            {
+                base.SetValue(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration.enumerateResourcesActivity2_TotalResultsCount1Property, value);
+            }
+        }
+
+        public static DependencyProperty enumerateResourcesActivity2_XPathFilter1Property = DependencyProperty.Register("enumerateResourcesActivity2_XPathFilter1", typeof(System.String), typeof(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration));
+
+        [DesignerSerializationVisibilityAttribute(DesignerSerializationVisibility.Visible)]
+        [BrowsableAttribute(true)]
+        [CategoryAttribute("Misc")]
+        public String enumerateResourcesActivity2_XPathFilter1
+        {
+            get
+            {
+                return ((string)(base.GetValue(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration.enumerateResourcesActivity2_XPathFilter1Property)));
+            }
+            set
+            {
+                base.SetValue(FIM.DerivativeAttributesActivity.DerivativeAttributesGeneration.enumerateResourcesActivity2_XPathFilter1Property, value);
+            }
+        }
+        #endregion
 
         public DerivativeAttributesGeneration()
         {
@@ -229,32 +439,53 @@ namespace FIM.DerivativeAttributesActivity
 
             this.readResourceActivity1_ActorId1 = new Guid(FIMADMGUID);
             this.readResourceActivity1_ResourceId1 = containingWorkflow.TargetId;
- 
+
             requestorGUID = containingWorkflow.ActorId;
             targetGUID = containingWorkflow.TargetId;
         }
 
+        private void InitializeUpnEnumerateActivity_ExecuteCode(object sender, EventArgs e)
+        {
+            lastName = readResourceActivity1.Resource["LastName"].ToString();
+            firstName = readResourceActivity1.Resource["FirstName"].ToString();
+            domain = readResourceActivity1.Resource["Domain"].ToString();
+
+            this.enumerateResourcesActivity1_ActorId1 = new Guid(FIMADMGUID);
+            this.enumerateResourcesActivity1_PageSize1 = 100;
+            this.enumerateResourcesActivity1_XPathFilter1 = "/Person[(FirstName =" + firstName + ") and (LastName=" + lastName + ")]";
+        }
+
+        private void InitializeSamEnumerateActivity_ExecuteCode(object sender, EventArgs e)
+        {
+            samAccountName = (lastName.Length > 5 ? lastName.ToLower().Substring(0, 5) : lastName.ToLower()) + firstName.ToLower().Substring(0, 2);
+            this.enumerateResourcesActivity2_ActorId1 = new Guid(FIMADMGUID);
+            this.enumerateResourcesActivity2_PageSize1 = 100;
+            this.enumerateResourcesActivity2_XPathFilter1 = "/Person[(MiddleName="+ samAccountName +")]";
+        }
+
         private void InitializeUpdate_ExecuteCode(object sender, EventArgs e)
         {
-            //displayName = readResourceActivity1_Resource1["firstName"] + " " + readResourceActivity1_Resource1["lastName"];
-            string lastName = readResourceActivity1.Resource["LastName"].ToString();
-            string firstName = readResourceActivity1.Resource["FirstName"].ToString();
-            string domain = readResourceActivity1.Resource["Domain"].ToString();
+            countUpn = (int)enumerateResourcesActivity1_TotalResultsCount1;
+            countSam = (int)enumerateResourcesActivity2_TotalResultsCount1;
+            if(countUpn <= 1)
+                displayName = firstName + " " + lastName;
+            else
+                displayName = firstName + " " + lastName + countUpn.ToString();
+            //samAccountName 
+            samAccountName += countSam.ToString();
+            //Upn
+            upn = firstName + "." + lastName + countUpn.ToString() + "@" + domain;
 
-            displayName = firstName + " " + lastName;
             updateResourceActivity1_ActorId1 = requestorGUID;
             updateResourceActivity1_ResourceId1 = targetGUID;
-
-            //Upn
-            upn = firstName + "." + lastName + "1@" + domain;
-
-            //samAccountName 
-            samAccountName = (lastName.Length > 5 ? lastName.ToLower().Substring(0, 5) : lastName) + firstName.ToLower().Substring(0,2) +"1";
             updateResourceActivity1.UpdateParameters = new UpdateRequestParameter[]{
                 new UpdateRequestParameter("LAB-samAccountName",UpdateMode.Modify,samAccountName),
                 new UpdateRequestParameter("DisplayName", UpdateMode.Modify, displayName),
                 new UpdateRequestParameter("labUpn",UpdateMode.Modify,upn)
               };
         }
+
+
+        
     }
 }
