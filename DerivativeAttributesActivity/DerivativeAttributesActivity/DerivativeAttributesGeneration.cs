@@ -229,7 +229,7 @@ namespace FIM.DerivativeAttributesActivity
 
             this.readResourceActivity1_ActorId1 = new Guid(FIMADMGUID);
             this.readResourceActivity1_ResourceId1 = containingWorkflow.TargetId;
-
+ 
             requestorGUID = containingWorkflow.ActorId;
             targetGUID = containingWorkflow.TargetId;
         }
