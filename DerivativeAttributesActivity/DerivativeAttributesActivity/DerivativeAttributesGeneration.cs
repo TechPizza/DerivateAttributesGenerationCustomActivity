@@ -30,6 +30,7 @@ namespace FIM.DerivativeAttributesActivity
         private Guid targetGUID;
         private string displayName;
         private string samAccountName;
+        private string upn;
         const string FIMADMGUID = "4074f258-a177-42df-b8ca-cba1a0cefb25";
 
         #region ReadCurrentRequest
@@ -236,19 +237,23 @@ namespace FIM.DerivativeAttributesActivity
         private void InitializeUpdate_ExecuteCode(object sender, EventArgs e)
         {
             //displayName = readResourceActivity1_Resource1["firstName"] + " " + readResourceActivity1_Resource1["lastName"];
-            displayName = readResourceActivity1.Resource["FirstName"].ToString() + " " + readResourceActivity1.Resource["LastName"].ToString();
-            updateResourceActivity1.UpdateParameters = new UpdateRequestParameter[] {
-                    new UpdateRequestParameter("DisplayName", UpdateMode.Modify, displayName)
-                };
+            string lastName = readResourceActivity1.Resource["LastName"].ToString();
+            string firstName = readResourceActivity1.Resource["FirstName"].ToString();
+            string domain = readResourceActivity1.Resource["Domain"].ToString();
+
+            displayName = firstName + " " + lastName;
             updateResourceActivity1_ActorId1 = requestorGUID;
             updateResourceActivity1_ResourceId1 = targetGUID;
 
+            //Upn
+            upn = firstName + "." + lastName + "1@" + domain;
+
             //samAccountName 
-            string lastName = readResourceActivity1.Resource["LastName"].ToString();
-            string firstName = readResourceActivity1.Resource["FirstName"].ToString();
-            samAccountName = lastName.Length > 5 ? lastName.ToLower().Substring(0, 5) : lastName + firstName.ToLower().Substring(0,2) +"1";
+            samAccountName = (lastName.Length > 5 ? lastName.ToLower().Substring(0, 5) : lastName) + firstName.ToLower().Substring(0,2) +"1";
             updateResourceActivity1.UpdateParameters = new UpdateRequestParameter[]{
-                new UpdateRequestParameter("SamAccountName",UpdateMode.Insert,samAccountName)
+                new UpdateRequestParameter("LAB-samAccountName",UpdateMode.Modify,samAccountName),
+                new UpdateRequestParameter("DisplayName", UpdateMode.Modify, displayName),
+                new UpdateRequestParameter("labUpn",UpdateMode.Modify,upn)
               };
         }
     }
