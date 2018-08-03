@@ -474,7 +474,7 @@ namespace FIM.DerivativeAttributesActivity
             //samAccountName 
             samAccountName += countSam.ToString();
             //Upn
-            upn = firstName + "." + lastName + countUpn.ToString() + "@" + domain;
+            upn = firstName.ToLower() + "." + lastName.ToLower() + countUpn.ToString() + "@" + domain;
 
             updateResourceActivity1_ActorId1 = requestorGUID;
             updateResourceActivity1_ResourceId1 = targetGUID;
