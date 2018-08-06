@@ -6,3 +6,4 @@ DerivativeAttributesActivity/.vs/DerivativeAttributesActivity/v15/Server/sqlite3
 DerivativeAttributesActivity/.vs/DerivativeAttributesActivity/v15/Server/sqlite3/storage.ide-wal
 DerivativeAttributesActivity/DerivativeAttributesActivity/obj/Debug/DerivativeAttributesActivity.csproj.FileListAbsolute.txt
 DerivativeAttributesActivity/DerivativeAttributesActivity/obj/Debug/DerivativeAttributesActivity.csprojResolveAssemblyReference.cache
+*.cache
