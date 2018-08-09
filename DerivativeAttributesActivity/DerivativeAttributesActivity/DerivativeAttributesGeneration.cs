@@ -36,7 +36,7 @@ namespace FIM.DerivativeAttributesActivity
         private string domain;
         private int countUpn;
         private int countSam;
-        const string FIMADMGUID = "4074f258-a177-42df-b8ca-cba1a0cefb25";
+        private Guid FIMADMGUID = new Guid("4074f258-a177-42df-b8ca-cba1a0cefb25");
 
         #region ReadCurrentRequest
         public static DependencyProperty currentRequestActivity1_CurrentRequest1Property = DependencyProperty.Register
@@ -437,7 +437,7 @@ namespace FIM.DerivativeAttributesActivity
                 throw new InvalidOperationException("Unable to get Containing Workflow");
             }
 
-            this.readResourceActivity1_ActorId1 = new Guid(FIMADMGUID);
+            this.readResourceActivity1_ActorId1 = FIMADMGUID;
             this.readResourceActivity1_ResourceId1 = containingWorkflow.TargetId;
 
             requestorGUID = containingWorkflow.ActorId;
@@ -450,15 +450,18 @@ namespace FIM.DerivativeAttributesActivity
             firstName = readResourceActivity1.Resource["FirstName"].ToString();
             domain = readResourceActivity1.Resource["Domain"].ToString();
 
-            this.enumerateResourcesActivity1_ActorId1 = new Guid(FIMADMGUID);
+            this.enumerateResourcesActivity1_ActorId1 = FIMADMGUID;
             this.enumerateResourcesActivity1_PageSize1 = 100;
             this.enumerateResourcesActivity1_XPathFilter1 = "/Person[(FirstName =" + firstName + ") and (LastName=" + lastName + ")]";
         }
 
         private void InitializeSamEnumerateActivity_ExecuteCode(object sender, EventArgs e)
         {
-            samAccountName = (lastName.Length > 5 ? lastName.ToLower().Substring(0, 5) : lastName.ToLower()) + firstName.ToLower().Substring(0, 2);
-            this.enumerateResourcesActivity2_ActorId1 = new Guid(FIMADMGUID);
+            if(readResourceActivity1.Resource["labSource"].ToString() == "INTERNAL")
+                samAccountName = (lastName.Length > 5 ? lastName.ToLower().Substring(0, 5) : lastName.ToLower()) + firstName.ToLower().Substring(0, 2);
+            else
+                samAccountName = "X_" + (lastName.Length > 5 ? lastName.ToLower().Substring(0, 5) : lastName.ToLower()) + firstName.ToLower().Substring(0, 2);
+            this.enumerateResourcesActivity2_ActorId1 = FIMADMGUID;
             this.enumerateResourcesActivity2_PageSize1 = 100;
             this.enumerateResourcesActivity2_XPathFilter1 = "/Person[(MiddleName="+ samAccountName +")]";
         }
@@ -467,14 +470,28 @@ namespace FIM.DerivativeAttributesActivity
         {
             countUpn = (int)enumerateResourcesActivity1_TotalResultsCount1;
             countSam = (int)enumerateResourcesActivity2_TotalResultsCount1;
-            if(countUpn <= 1)
-                displayName = firstName + " " + lastName;
+            if (readResourceActivity1.Resource["labSource"].ToString() == "INTERNAL")
+            {
+                if (countUpn <= 1)
+                    displayName = firstName + " " + lastName;
+                else
+                    displayName = firstName + " " + lastName + countUpn.ToString();
+                //samAccountName 
+                samAccountName += countSam.ToString();
+                //Upn
+                upn = firstName.ToLower() + "." + lastName.ToLower() + countUpn.ToString() + "@" + domain;
+            }
             else
-                displayName = firstName + " " + lastName + countUpn.ToString();
-            //samAccountName 
-            samAccountName += countSam.ToString();
-            //Upn
-            upn = firstName.ToLower() + "." + lastName.ToLower() + countUpn.ToString() + "@" + domain;
+            {
+                if (countUpn <= 1)
+                    displayName = firstName + " " + lastName + ",EX";
+                else
+                    displayName = firstName + " " + lastName + countUpn.ToString() + ",EX";
+                //samAccountName 
+                samAccountName += countSam.ToString();
+                //Upn
+                upn = firstName.ToLower() + "." + lastName.ToLower() + countUpn.ToString() + ".ex@" + domain;
+            }
 
             updateResourceActivity1_ActorId1 = requestorGUID;
             updateResourceActivity1_ResourceId1 = targetGUID;
@@ -484,8 +501,5 @@ namespace FIM.DerivativeAttributesActivity
                 new UpdateRequestParameter("labUpn",UpdateMode.Modify,upn)
               };
         }
-
-
-        
     }
 }
