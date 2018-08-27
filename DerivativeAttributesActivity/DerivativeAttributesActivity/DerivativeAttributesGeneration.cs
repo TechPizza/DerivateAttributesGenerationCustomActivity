@@ -21,15 +21,20 @@ using System.Data;
 using System.DirectoryServices;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using System.Threading;
 
 namespace FIM.DerivativeAttributesActivity
 {
     public partial class DerivativeAttributesGeneration : SequenceActivity
     {
+        //private static object _lock = new object();
+
         private Guid requestorGUID;
         private Guid targetGUID;
         private string displayName;
+        private string baseSamAccountName;
         private string samAccountName;
+        private string baseUpn;
         private string upn;
         private string firstName;
         private string lastName;
@@ -428,6 +433,8 @@ namespace FIM.DerivativeAttributesActivity
 
         private void InitiliazeReadSubject_ExecuteCode(object sender, EventArgs e)
         {
+            //Monitor.Enter(_lock);
+
             RequestType currentRequest = this.ReadCurrentRequestActivity.CurrentRequest;
             ReadOnlyCollection<CreateRequestParameter> requestParameters = currentRequest.ParseParameters<CreateRequestParameter>();
 
@@ -444,42 +451,83 @@ namespace FIM.DerivativeAttributesActivity
             targetGUID = containingWorkflow.TargetId;
         }
 
-        private void InitializeUpnEnumerateActivity_ExecuteCode(object sender, EventArgs e)
+        private void LoopWhileUniqueUpn_ExecuteCode(object sender, ConditionalEventArgs e)
         {
-            lastName = readResourceActivity1.Resource["LastName"].ToString();
-            firstName = readResourceActivity1.Resource["FirstName"].ToString();
-            domain = readResourceActivity1.Resource["Domain"].ToString();
+            bool keepLooping = true;
 
-            this.enumerateResourcesActivity1_ActorId1 = FIMADMGUID;
-            this.enumerateResourcesActivity1_PageSize1 = 100;
-            this.enumerateResourcesActivity1_XPathFilter1 = "/Person[(FirstName =" + firstName + ") and (LastName=" + lastName + ")]";
+            if (string.IsNullOrEmpty(baseUpn))
+            {
+                lastName = readResourceActivity1.Resource["LastName"].ToString();
+                firstName = readResourceActivity1.Resource["FirstName"].ToString();
+                domain = readResourceActivity1.Resource["Domain"].ToString();
+                baseUpn = firstName.ToLower() + "." + lastName.ToLower();
+
+                if (readResourceActivity1.Resource["labSource"].ToString() == "INTERNAL")
+                    upn = baseUpn + "@" + domain;
+                else
+                    upn = baseUpn + ".ex@" + domain;
+                countUpn = 1;
+                this.enumerateResourcesActivity1_ActorId1 = FIMADMGUID;
+                this.enumerateResourcesActivity1_PageSize1 = 100;
+                this.enumerateResourcesActivity1_XPathFilter1 = "/Person[(FirstName =" + firstName + ") and (LastName=" + lastName + ")]";
+            }
+            else if (enumerateResourcesActivity1_TotalResultsCount1 > 0)
+            {
+                if (readResourceActivity1.Resource["labSource"].ToString() == "INTERNAL")
+                    upn = baseUpn + (++countUpn) + "@" + domain;
+                else
+                    upn = baseUpn + (++countUpn) + ".ex@" + domain;
+                this.enumerateResourcesActivity2_ActorId1 = FIMADMGUID;
+                this.enumerateResourcesActivity2_PageSize1 = 100;
+                this.enumerateResourcesActivity2_XPathFilter1 = "/Person[(labUpn=" + upn + ")]";
+            }
+            else
+            {
+                keepLooping = false;
+            }
+
+            e.Result = keepLooping;
         }
 
-        private void InitializeSamEnumerateActivity_ExecuteCode(object sender, EventArgs e)
+        private void LoopWhileUnique_ExecuteCode(object sender, ConditionalEventArgs e)
         {
-            if(readResourceActivity1.Resource["labSource"].ToString() == "INTERNAL")
-                samAccountName = (lastName.Length > 5 ? lastName.ToLower().Substring(0, 5) : lastName.ToLower()) + firstName.ToLower().Substring(0, 2);
+            bool keepLooping = true;
+
+            if (string.IsNullOrEmpty(baseSamAccountName))
+            {
+                countSam = 1;
+                if (readResourceActivity1.Resource["labSource"].ToString() == "INTERNAL")
+                    baseSamAccountName = CalculateSamAccountName(lastName, firstName);
+                else
+                    baseSamAccountName = "X_" + CalculateSamAccountName(lastName, firstName);
+                samAccountName = baseSamAccountName + countSam.ToString();
+                this.enumerateResourcesActivity2_ActorId1 = FIMADMGUID;
+                this.enumerateResourcesActivity2_PageSize1 = 100;
+                this.enumerateResourcesActivity2_XPathFilter1 = "/Person[(LAB-samAccountName=" + samAccountName + ")]";
+            }
+            else if (enumerateResourcesActivity2_TotalResultsCount1 > 0)
+            {
+                samAccountName = baseSamAccountName + (++countSam);
+                this.enumerateResourcesActivity2_ActorId1 = FIMADMGUID;
+                this.enumerateResourcesActivity2_PageSize1 = 100;
+                this.enumerateResourcesActivity2_XPathFilter1 = "/Person[(LAB-samAccountName=" + samAccountName + ")]";
+            }
             else
-                samAccountName = "X_" + (lastName.Length > 5 ? lastName.ToLower().Substring(0, 5) : lastName.ToLower()) + firstName.ToLower().Substring(0, 2);
-            this.enumerateResourcesActivity2_ActorId1 = FIMADMGUID;
-            this.enumerateResourcesActivity2_PageSize1 = 100;
-            this.enumerateResourcesActivity2_XPathFilter1 = "/Person[(MiddleName="+ samAccountName +")]";
+            {
+                keepLooping = false;
+            }
+
+            e.Result = keepLooping;
         }
 
         private void InitializeUpdate_ExecuteCode(object sender, EventArgs e)
         {
-            countUpn = (int)enumerateResourcesActivity1_TotalResultsCount1;
-            countSam = (int)enumerateResourcesActivity2_TotalResultsCount1;
             if (readResourceActivity1.Resource["labSource"].ToString() == "INTERNAL")
             {
                 if (countUpn <= 1)
                     displayName = firstName + " " + lastName;
                 else
                     displayName = firstName + " " + lastName + countUpn.ToString();
-                //samAccountName 
-                samAccountName += countSam.ToString();
-                //Upn
-                upn = firstName.ToLower() + "." + lastName.ToLower() + countUpn.ToString() + "@" + domain;
             }
             else
             {
@@ -487,10 +535,6 @@ namespace FIM.DerivativeAttributesActivity
                     displayName = firstName + " " + lastName + ",EX";
                 else
                     displayName = firstName + " " + lastName + countUpn.ToString() + ",EX";
-                //samAccountName 
-                samAccountName += countSam.ToString();
-                //Upn
-                upn = firstName.ToLower() + "." + lastName.ToLower() + countUpn.ToString() + ".ex@" + domain;
             }
 
             updateResourceActivity1_ActorId1 = requestorGUID;
@@ -500,6 +544,13 @@ namespace FIM.DerivativeAttributesActivity
                 new UpdateRequestParameter("DisplayName", UpdateMode.Modify, displayName),
                 new UpdateRequestParameter("labUpn",UpdateMode.Modify,upn)
               };
+
+            //Monitor.Exit(_lock);
+        }
+
+        private string CalculateSamAccountName(string lastName, string firstName)
+        {
+            return (lastName.Length > 5 ? lastName.ToLower().Substring(0, 5) : lastName.ToLower()) + firstName.ToLower().Substring(0, 2);
         }
     }
 }

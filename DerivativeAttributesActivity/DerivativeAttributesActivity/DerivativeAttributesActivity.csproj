@@ -86,6 +86,11 @@
   <ItemGroup>
     <Content Include="config.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DerivativeAttributesGeneration.rules">
+      <DependentUpon>DerivativeAttributesGeneration.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.Targets" />
   <Import Project="$(MSBuildToolsPath)\Workflow.Targets" />
 </Project>
