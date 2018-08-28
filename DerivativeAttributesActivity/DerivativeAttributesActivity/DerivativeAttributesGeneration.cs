@@ -27,7 +27,7 @@ namespace FIM.DerivativeAttributesActivity
 {
     public partial class DerivativeAttributesGeneration : SequenceActivity
     {
-        //private static object _lock = new object();
+        private static object _lock = new object();
 
         private Guid requestorGUID;
         private Guid targetGUID;
@@ -431,10 +431,13 @@ namespace FIM.DerivativeAttributesActivity
             InitializeComponent();
         }
 
+        private void MutexLock_ExecuteCode(object sender, EventArgs e)
+        {
+            Monitor.Enter(_lock);
+        }
+
         private void InitiliazeReadSubject_ExecuteCode(object sender, EventArgs e)
         {
-            //Monitor.Enter(_lock);
-
             RequestType currentRequest = this.ReadCurrentRequestActivity.CurrentRequest;
             ReadOnlyCollection<CreateRequestParameter> requestParameters = currentRequest.ParseParameters<CreateRequestParameter>();
 
@@ -469,7 +472,7 @@ namespace FIM.DerivativeAttributesActivity
                 countUpn = 1;
                 this.enumerateResourcesActivity1_ActorId1 = FIMADMGUID;
                 this.enumerateResourcesActivity1_PageSize1 = 100;
-                this.enumerateResourcesActivity1_XPathFilter1 = "/Person[(FirstName =" + firstName + ") and (LastName=" + lastName + ")]";
+                this.enumerateResourcesActivity1_XPathFilter1 = "/Person[(labUpn='" + upn + "')]";
             }
             else if (enumerateResourcesActivity1_TotalResultsCount1 > 0)
             {
@@ -477,9 +480,9 @@ namespace FIM.DerivativeAttributesActivity
                     upn = baseUpn + (++countUpn) + "@" + domain;
                 else
                     upn = baseUpn + (++countUpn) + ".ex@" + domain;
-                this.enumerateResourcesActivity2_ActorId1 = FIMADMGUID;
-                this.enumerateResourcesActivity2_PageSize1 = 100;
-                this.enumerateResourcesActivity2_XPathFilter1 = "/Person[(labUpn=" + upn + ")]";
+                this.enumerateResourcesActivity1_ActorId1 = FIMADMGUID;
+                this.enumerateResourcesActivity1_PageSize1 = 100;
+                this.enumerateResourcesActivity1_XPathFilter1 = "/Person[(labUpn='" + upn + "')]";
             }
             else
             {
@@ -544,8 +547,11 @@ namespace FIM.DerivativeAttributesActivity
                 new UpdateRequestParameter("DisplayName", UpdateMode.Modify, displayName),
                 new UpdateRequestParameter("labUpn",UpdateMode.Modify,upn)
               };
+        }
 
-            //Monitor.Exit(_lock);
+        private void MutexUnlock_ExecuteCode(object sender, EventArgs e)
+        {
+            Monitor.Exit(_lock);
         }
 
         private string CalculateSamAccountName(string lastName, string firstName)

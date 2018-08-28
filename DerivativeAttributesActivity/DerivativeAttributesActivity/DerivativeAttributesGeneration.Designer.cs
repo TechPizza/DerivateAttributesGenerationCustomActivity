@@ -53,11 +53,13 @@ namespace FIM.DerivativeAttributesActivity
             this.enumerateResourcesActivity2 = new Microsoft.ResourceManagement.Workflow.Activities.EnumerateResourcesActivity();
             this.enumerateResourcesActivity1 = new Microsoft.ResourceManagement.Workflow.Activities.EnumerateResourcesActivity();
             this.updateResourceActivity1 = new Microsoft.ResourceManagement.Workflow.Activities.UpdateResourceActivity();
+            this.mutexUnlock = new System.Workflow.Activities.CodeActivity();
             this.InitializeUpdate = new System.Workflow.Activities.CodeActivity();
             this.loopWhileUnique = new System.Workflow.Activities.WhileActivity();
             this.loopWhileUniqueUpn = new System.Workflow.Activities.WhileActivity();
             this.readResourceActivity1 = new Microsoft.ResourceManagement.Workflow.Activities.ReadResourceActivity();
             this.InitializeReadSubject = new System.Workflow.Activities.CodeActivity();
+            this.mutexLock = new System.Workflow.Activities.CodeActivity();
             this.ReadCurrentRequestActivity = new Microsoft.ResourceManagement.Workflow.Activities.CurrentRequestActivity();
             // 
             // enumerateResourcesActivity2
@@ -123,6 +125,11 @@ namespace FIM.DerivativeAttributesActivity
             this.updateResourceActivity1.SetBinding(Microsoft.ResourceManagement.Workflow.Activities.UpdateResourceActivity.UpdateParametersProperty, ((System.Workflow.ComponentModel.ActivityBind)(activitybind17)));
             this.updateResourceActivity1.SetBinding(Microsoft.ResourceManagement.Workflow.Activities.UpdateResourceActivity.AuthorizationWaitTimeInSecondsProperty, ((System.Workflow.ComponentModel.ActivityBind)(activitybind15)));
             // 
+            // mutexUnlock
+            // 
+            this.mutexUnlock.Name = "mutexUnlock";
+            this.mutexUnlock.ExecuteCode += new System.EventHandler(this.MutexUnlock_ExecuteCode);
+            // 
             // InitializeUpdate
             // 
             this.InitializeUpdate.Name = "InitializeUpdate";
@@ -163,6 +170,11 @@ namespace FIM.DerivativeAttributesActivity
             this.InitializeReadSubject.Name = "InitializeReadSubject";
             this.InitializeReadSubject.ExecuteCode += new System.EventHandler(this.InitiliazeReadSubject_ExecuteCode);
             // 
+            // mutexLock
+            // 
+            this.mutexLock.Name = "mutexLock";
+            this.mutexLock.ExecuteCode += new System.EventHandler(this.MutexLock_ExecuteCode);
+            // 
             // ReadCurrentRequestActivity
             // 
             activitybind22.Name = "DerivativeAttributesGeneration";
@@ -173,11 +185,13 @@ namespace FIM.DerivativeAttributesActivity
             // DerivativeAttributesGeneration
             // 
             this.Activities.Add(this.ReadCurrentRequestActivity);
+            this.Activities.Add(this.mutexLock);
             this.Activities.Add(this.InitializeReadSubject);
             this.Activities.Add(this.readResourceActivity1);
             this.Activities.Add(this.loopWhileUniqueUpn);
             this.Activities.Add(this.loopWhileUnique);
             this.Activities.Add(this.InitializeUpdate);
+            this.Activities.Add(this.mutexUnlock);
             this.Activities.Add(this.updateResourceActivity1);
             this.Name = "DerivativeAttributesGeneration";
             this.CanModifyActivities = false;
@@ -185,6 +199,10 @@ namespace FIM.DerivativeAttributesActivity
         }
 
         #endregion
+
+        private CodeActivity mutexUnlock;
+
+        private CodeActivity mutexLock;
 
         private WhileActivity loopWhileUniqueUpn;
 
@@ -203,6 +221,8 @@ namespace FIM.DerivativeAttributesActivity
         private CodeActivity InitializeReadSubject;
 
         private Microsoft.ResourceManagement.Workflow.Activities.CurrentRequestActivity ReadCurrentRequestActivity;
+
+
 
 
 
