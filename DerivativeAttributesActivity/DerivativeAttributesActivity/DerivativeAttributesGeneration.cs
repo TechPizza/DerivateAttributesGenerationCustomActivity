@@ -43,6 +43,26 @@ namespace FIM.DerivativeAttributesActivity
         private int countSam;
         private Guid FIMADMGUID = new Guid("4074f258-a177-42df-b8ca-cba1a0cefb25");
 
+
+        #region UIProperty
+        public static DependencyProperty UpnSuffixProperty = DependencyProperty.Register("UpnSuffix", typeof(string), typeof(DerivativeAttributesGeneration));
+
+        [Description("UpnSuffix")]
+        [Category("UpnSuffix Category")]
+        [Browsable(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        public string UpnSuffix
+        {
+            get
+            {
+                return ((string)(base.GetValue(DerivativeAttributesGeneration.UpnSuffixProperty)));
+            }
+            set
+            {
+                base.SetValue(DerivativeAttributesGeneration.UpnSuffixProperty, value);
+            }
+        }
+        #endregion
         #region ReadCurrentRequest
         public static DependencyProperty currentRequestActivity1_CurrentRequest1Property = DependencyProperty.Register
             ("currentRequestActivity1_CurrentRequest1", typeof(Microsoft.ResourceManagement.WebServices.WSResourceManagement.RequestType),
@@ -506,14 +526,14 @@ namespace FIM.DerivativeAttributesActivity
                 samAccountName = baseSamAccountName + countSam.ToString();
                 this.enumerateResourcesActivity2_ActorId1 = FIMADMGUID;
                 this.enumerateResourcesActivity2_PageSize1 = 100;
-                this.enumerateResourcesActivity2_XPathFilter1 = "/Person[(LAB-samAccountName=" + samAccountName + ")]";
+                this.enumerateResourcesActivity2_XPathFilter1 = "/Person[(AccountName=" + samAccountName + ")]";
             }
             else if (enumerateResourcesActivity2_TotalResultsCount1 > 0)
             {
                 samAccountName = baseSamAccountName + (++countSam);
                 this.enumerateResourcesActivity2_ActorId1 = FIMADMGUID;
                 this.enumerateResourcesActivity2_PageSize1 = 100;
-                this.enumerateResourcesActivity2_XPathFilter1 = "/Person[(LAB-samAccountName=" + samAccountName + ")]";
+                this.enumerateResourcesActivity2_XPathFilter1 = "/Person[(AccountName=" + samAccountName + ")]";
             }
             else
             {
@@ -521,6 +541,30 @@ namespace FIM.DerivativeAttributesActivity
             }
 
             e.Result = keepLooping;
+        }
+
+        private string ReadWorkFlowParameters(string _box, SequentialWorkflow _wf)
+        {
+            string _resolvedString = "";
+            object WFDataParamValue = "";
+            if (!string.IsNullOrEmpty(_box.ToString()))
+            {
+                if (_box.ToString().Contains("[//WorkflowData/"))
+                {
+                    string WFDataParamName = _box.ToString().Replace("[//WorkflowData/", "").Replace("]", "");
+                    _wf.WorkflowDictionary.TryGetValue(WFDataParamName, out WFDataParamValue);
+                    _resolvedString = WFDataParamValue.ToString();
+                    return _resolvedString;
+                }
+                else
+                {
+                    return _box.ToString();
+                }
+
+            }
+            return _resolvedString;
+            //else
+            //    throw new Exception(String.Format("Input Parameter {0} could not be blank",_box.ToString()));
         }
 
         private void InitializeUpdate_ExecuteCode(object sender, EventArgs e)
@@ -540,10 +584,21 @@ namespace FIM.DerivativeAttributesActivity
                     displayName = firstName + " " + lastName + countUpn.ToString() + ",EX";
             }
 
+            //Get containing Workflow
+            SequentialWorkflow containingWorkflow = null;
+            if (!SequentialWorkflow.TryGetContainingWorkflow(this, out containingWorkflow))
+            {
+                throw new InvalidOperationException("Could not get parent workflow!");
+            }
+
+            string displayNameSuffix = ReadWorkFlowParameters(UpnSuffix, containingWorkflow);
+
+            displayName += displayNameSuffix;
+
             updateResourceActivity1_ActorId1 = requestorGUID;
             updateResourceActivity1_ResourceId1 = targetGUID;
             updateResourceActivity1.UpdateParameters = new UpdateRequestParameter[]{
-                new UpdateRequestParameter("LAB-samAccountName",UpdateMode.Modify,samAccountName),
+                new UpdateRequestParameter("AccountName",UpdateMode.Modify,samAccountName),
                 new UpdateRequestParameter("DisplayName", UpdateMode.Modify, displayName),
                 new UpdateRequestParameter("labUpn",UpdateMode.Modify,upn)
               };

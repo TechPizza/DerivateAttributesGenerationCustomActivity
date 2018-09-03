@@ -25,6 +25,7 @@ namespace FIM.DerivativeAttributesActivity
                 return null;
             }
             DerivativeAttributesGeneration _calc = new DerivativeAttributesGeneration();
+            _calc.UpnSuffix = this.GetText("_upnSuffix");
             // _calc.SetSource1 = this.GetText("_src");
             // _calc.SetDest1 = this.GetText("_dest");
             return _calc;
@@ -40,6 +41,7 @@ namespace FIM.DerivativeAttributesActivity
             DerivativeAttributesGeneration _calc = activity as DerivativeAttributesGeneration;
             if (null != _calc)
             {
+                this.SetText("_upnSuffix", (!string.IsNullOrEmpty(_calc.UpnSuffix)) ? _calc.UpnSuffix : this.GetText("_upnSuffix"));
                 // this.SetText("_src", _calc.SetSource1);
                 //this.SetText("_dest", _calc.SetDest1);
             }
@@ -51,6 +53,7 @@ namespace FIM.DerivativeAttributesActivity
         public override ActivitySettingsPartData PersistSettings()
         {
             ActivitySettingsPartData data = new ActivitySettingsPartData();
+            data["_upnSuffix"] = this.GetText("_upnSuffix");
             // data["_src"] = this.GetText("_src");
             //data["_dest"] = this.GetText("_dest");
             return data;
@@ -61,11 +64,11 @@ namespace FIM.DerivativeAttributesActivity
         /// </summary>
         public override void RestoreSettings(ActivitySettingsPartData data)
         {
-            //if (null != data)
-            //{
-            //    //    this.SetText("_src", (string)data["_src"]);
-            //    this.SetText("_dest", (string)data["_dest"]);
-            //}
+            if (null != data)
+            {
+                //    this.SetText("_src", (string)data["_src"]);
+                this.SetText("_upnSuffix", (string)data["_upnSuffix"]);
+            }
         }
 
         /// <summary>
@@ -73,8 +76,8 @@ namespace FIM.DerivativeAttributesActivity
         /// </summary>
         public override void SwitchMode(ActivitySettingsPartMode mode)
         {
-            //bool readOnly = (mode == ActivitySettingsPartMode.View);
-            //// this.SetTextBoxReadOnlyOption("_src", readOnly);
+            bool readOnly = (mode == ActivitySettingsPartMode.View);
+            this.SetTextBoxReadOnlyOption("_upnSuffix", readOnly);
             //this.SetTextBoxReadOnlyOption("_dest", readOnly);
         }
 
@@ -121,7 +124,7 @@ namespace FIM.DerivativeAttributesActivity
             controlLayoutTable.BorderWidth = 0;
             controlLayoutTable.CellPadding = 2;
             //Add a TableRow for each textbox in the UI 
-            //   controlLayoutTable.Rows.Add(this.AddTableRowTextBox("SourceAttribute:", "_src", 400, 100, false, "Enter the Source Attribute."));
+             controlLayoutTable.Rows.Add(this.AddTableRowTextBox("Upn Suffix:", "_upnSuffix", 400, 100, false, string.Empty));
             //controlLayoutTable.Rows.Add(this.AddTableRowTextBox("DestAttribute:", "_dest", 400, 100, false, "Enter the destination Attribute."));
             this.Controls.Add(controlLayoutTable);
 
